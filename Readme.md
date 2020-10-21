@@ -86,7 +86,21 @@ So after calling $columnGenerator->getColumn(true) it is not easy to get the val
     $columnGenerator->getCurrentColumn();  // A
     $columnGenerator->getColumn(false);    // B
     $columnGenerator->getCurrentColumn();  // A
+
+Some real world use for this could be:
+
+    $spreadsheet = new Spreadsheet();
+    $productsSheet = $spreadsheet->createSheet();
+    $properties = $this->getBigListOfProperties();
+   
+    $columnGenerator = new ColumnGenerator(1);
+   
+    foreach ($properties as $property) {
+        $productsSheet->setCellValue($columnGenerator->getColumn(), $property->getName());
+    }
     
+    // set bold on each generated column
+    $productsSheet->getStyle("A1:" . $columnGenerator->getCurrentColumn())->getFont()->setBold(true);
 
 ## Reset
 
