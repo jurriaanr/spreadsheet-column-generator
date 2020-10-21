@@ -81,7 +81,7 @@ First of all, the getColumn() method has an optional $movePointerForward paramet
 So after calling $columnGenerator->getColumn(true) it is not easy to get the value that was returned _again_, since internally the state is already at the next column. For this reason you can call the getCurrentColumn() method, which will return whatever the last call to getColumn(true) returned before moving the pointer. 
 
     $columnGenerator = new ColumnGenerator();
-    $columnGenerator->getCurrentColumn();  // null, nothing was returned yet
+    $columnGenerator->getCurrentColumn();  // A, this is for convenience, in reality there is no value yet
     $columnGenerator->getColumn();         // A, internally moves to B
     $columnGenerator->getCurrentColumn();  // A
     $columnGenerator->getColumn(false);    // B
