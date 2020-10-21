@@ -1,5 +1,6 @@
 {
   "name": "jurriaanr/spreadsheet-column-generator",
+  "type": "library",
   "description": "Generate the column names for use in spreadsheets",
   "keywords": [
     "Generator",
