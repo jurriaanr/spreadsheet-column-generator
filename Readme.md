@@ -69,7 +69,7 @@ It is also possible to forward later on, although the walk methods will still wa
 ## Getting the right value
 
 Not all values are created equal. Depending on what you want to do with the generated column name and when there are different options.
-First of all, the getColumn() method has an optional $movePointerForward parameter. This default to true. That means that after receiving the value from the generator, internally the pointer will move forward.
+First of all, the getColumn() method has an optional $movePointerForward parameter. This defaults to true. That means that after receiving the value from the generator, internally the pointer will move forward.
 
     $columnGenerator = new ColumnGenerator();
     $columnGenerator->getColumn();          // A, internally moves to B
