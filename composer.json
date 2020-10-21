@@ -27,7 +27,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Outlaws\\Spreadsheet\\": "src/"
+      "Outlaws\\Spreadsheet\\": "src/Outlaws/Spreadsheet"
     }
   },
   "extra": {
