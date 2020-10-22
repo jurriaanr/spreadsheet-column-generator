@@ -50,6 +50,7 @@ You don't have to be to strict on the given column name, this will work as well 
         ...
     });
 
+The difference between walk and walkTo is that walk will reset the generator, and then visit all the columns again, up unto where the generator previously stopped. walkto() Will take off from the current position and walk to wherever you say it must go to.    
     
 ## Forwarding / Skipping the first _n_ columns
 
