@@ -6,7 +6,7 @@ namespace Outlaws\Spreadsheet;
 
 use Iterator;
 
-class ColumnGenerator implements ColumnGeneratorInterface
+class ColumnGenerator
 {
     private $generator;
     private $rowNumber;
@@ -51,7 +51,7 @@ class ColumnGenerator implements ColumnGeneratorInterface
     /*
      * Reset the generator and start over fresh
      */
-    public function reset(): ColumnGeneratorInterface
+    public function reset(): self
     {
         $this->init();
         return $this;
@@ -61,7 +61,7 @@ class ColumnGenerator implements ColumnGeneratorInterface
     /*
      * For each of the columns generated so far execute the given callable on the column name
      */
-    public function walk(callable $callable): ColumnGeneratorInterface
+    public function walk(callable $callable): self
     {
         $currentValue = $this->getCurrentColumn();
         if ($currentValue !== null) {
@@ -78,7 +78,7 @@ class ColumnGenerator implements ColumnGeneratorInterface
      * This function will not rewind and will forward the index until it's done.
      * You are a bit free in the columname in that is does not have to be uppercase and numbers are stripped
      */
-    public function walkTo(string $columnName, callable $callable): ColumnGeneratorInterface
+    public function walkTo(string $columnName, callable $callable): self
     {
         $clean = function ($s) {
             return $s ? strtoupper(preg_replace("/\d+/", '', $s)) : $s;
@@ -92,7 +92,7 @@ class ColumnGenerator implements ColumnGeneratorInterface
         return $this;
     }
 
-    public function forward(int $amount): ColumnGeneratorInterface
+    public function forward(int $amount): self
     {
         // the poor mens way of forwarding. The values can probably be calculated as well 🤷‍
         while ($amount-- > 0) {

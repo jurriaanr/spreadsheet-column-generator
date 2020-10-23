@@ -2,10 +2,7 @@
 
 namespace Test\Outlaws\Spreadsheet;
 
-use Outlaws\Spreadsheet\BetterColumnGenerator;
 use Outlaws\Spreadsheet\ColumnGenerator;
-use Outlaws\Spreadsheet\ColumnGeneratorInterface;
-use Outlaws\Spreadsheet\EvenBetterColumnGenerator;
 use PHPUnit\Framework\TestCase;
 
 class ColumnGeneratorTest extends TestCase
@@ -175,7 +172,7 @@ class ColumnGeneratorTest extends TestCase
         $this->assertEquals(5, $counter);
     }
 
-    private function getColumnGenerator(?int $rowNumber = null, int $startOffset = 0): ColumnGeneratorInterface
+    private function getColumnGenerator(?int $rowNumber = null, int $startOffset = 0): ColumnGenerator
     {
         return new ColumnGenerator($rowNumber, $startOffset);
     }
