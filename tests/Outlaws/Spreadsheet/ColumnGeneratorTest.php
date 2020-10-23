@@ -2,20 +2,23 @@
 
 namespace Test\Outlaws\Spreadsheet;
 
+use Outlaws\Spreadsheet\BetterColumnGenerator;
 use Outlaws\Spreadsheet\ColumnGenerator;
+use Outlaws\Spreadsheet\ColumnGeneratorInterface;
+use Outlaws\Spreadsheet\EvenBetterColumnGenerator;
 use PHPUnit\Framework\TestCase;
 
 class ColumnGeneratorTest extends TestCase
 {
     public function testItGeneratesStartingColumn()
     {
-        $generator = new ColumnGenerator();
+        $generator = $this->getColumnGenerator();
         $this->assertEquals('A', $generator->getColumn());
     }
 
     public function testItGeneratesNextColumns()
     {
-        $generator = new ColumnGenerator();
+        $generator = $this->getColumnGenerator();
         $generator->getColumn();
         $this->assertEquals('B', $generator->getColumn());
         $this->assertEquals('C', $generator->getColumn());
@@ -24,43 +27,55 @@ class ColumnGeneratorTest extends TestCase
 
     public function testItForwardsStartOffset()
     {
-        $generator = new ColumnGenerator(null, 10);
+        $generator = $this->getColumnGenerator(null, 10);
         $this->assertEquals('K', $generator->getColumn());
     }
 
     public function testItForwards()
     {
-        $generator = new ColumnGenerator();
+        $generator = $this->getColumnGenerator();
         $generator->forward(5);
         $this->assertEquals('F', $generator->getColumn());
 
-        $generator = new ColumnGenerator();
+        $generator = $this->getColumnGenerator();
         $generator->getColumn();
         $generator->forward(5);
         $this->assertEquals('G', $generator->getColumn());
     }
 
-    public function testItGeneratesTheCorrectColumnOnZ()
+    public function testItGeneratesColumnOnZ()
     {
-        $generator = new ColumnGenerator(null, 26);
+        $generator = $this->getColumnGenerator(null, 26);
         $this->assertEquals('AA', $generator->getColumn());
     }
 
-    public function testItGeneratesTheCorrectColumnOnZZ()
+    public function testItGeneratesColumnOnZZ()
     {
-        $generator = new ColumnGenerator(null, 27*26);
+        $generator = $this->getColumnGenerator(null, 27*26);
         $this->assertEquals('AAA', $generator->getColumn());
+    }
+
+    /**
+     * 16384 is max columns in Excel
+     */
+    public function testItGenerates16384()
+    {
+        $gen = $this->getColumnGenerator();
+        for ($i = 0; $i < 16384; $i++) {
+            echo $gen->getColumn() . "\n";
+        }
+        $this->assertEquals('XFD', $gen->getCurrentColumn());
     }
 
     public function testItForwardsBeyondZ()
     {
-        $generator = new ColumnGenerator(null, 30);
+        $generator = $this->getColumnGenerator(null, 30);
         $this->assertEquals('AE', $generator->getColumn());
     }
 
     public function testItGivesCurrentColumn()
     {
-        $generator = new ColumnGenerator();
+        $generator = $this->getColumnGenerator();
         $this->assertEquals('A', $generator->getColumn(false));
         $this->assertEquals('A', $generator->getColumn());
         $this->assertEquals('B', $generator->getColumn(false));
@@ -68,19 +83,19 @@ class ColumnGeneratorTest extends TestCase
 
     public function testItAddsRowNumber()
     {
-        $generator = new ColumnGenerator(5);
+        $generator = $this->getColumnGenerator(5);
         $this->assertEquals('A5', $generator->getColumn());
     }
 
     public function testItAddsMultiDigitRowNumber()
     {
-        $generator = new ColumnGenerator(15);
+        $generator = $this->getColumnGenerator(15);
         $this->assertEquals('A15', $generator->getColumn());
     }
 
     public function testItResets()
     {
-        $generator = new ColumnGenerator();
+        $generator = $this->getColumnGenerator();
         $generator->getColumn();
         $generator->getColumn();
         $generator->getColumn();
@@ -90,7 +105,7 @@ class ColumnGeneratorTest extends TestCase
 
     public function testItReturnsCurrentValue()
     {
-        $generator = new ColumnGenerator();
+        $generator = $this->getColumnGenerator();
         $this->assertEquals('A', $generator->getCurrentColumn());
         $generator->getColumn();
         $this->assertEquals('A', $generator->getCurrentColumn());
@@ -102,7 +117,7 @@ class ColumnGeneratorTest extends TestCase
 
     public function testItWalksAllValues()
     {
-        $generator = new ColumnGenerator();
+        $generator = $this->getColumnGenerator();
         for ($i = 0; $i < 30; $i++){
             $generator->getColumn();
         }
@@ -117,7 +132,7 @@ class ColumnGeneratorTest extends TestCase
 
     public function testWalkToZ()
     {
-        $generator = new ColumnGenerator();
+        $generator = $this->getColumnGenerator();
         $counter = 0;
         $generator->walkTo('Z', function() use (&$counter) {
             $counter++;
@@ -128,7 +143,7 @@ class ColumnGeneratorTest extends TestCase
 
     public function testItForwardsAndWalksTo()
     {
-        $generator = new ColumnGenerator(null, 10);
+        $generator = $this->getColumnGenerator(null, 10);
 
         $counter = 0;
         $generator->walkTo('Z', function() use (&$counter) {
@@ -140,7 +155,7 @@ class ColumnGeneratorTest extends TestCase
 
     public function testItStopsWhenWalkingToUsingLowerCase()
     {
-        $generator = new ColumnGenerator();
+        $generator = $this->getColumnGenerator();
         $counter = 0;
         // lowercase
         $generator->walkTo('e', function() use (&$counter) {
@@ -151,12 +166,17 @@ class ColumnGeneratorTest extends TestCase
 
     public function testItStopsWhenWalkingToLeavingOutRowNumber()
     {
-        $generator = new ColumnGenerator(1);
+        $generator = $this->getColumnGenerator(1);
         $counter = 0;
         // lowercase
         $generator->walkTo('e', function() use (&$counter) {
             $counter++;
         });
         $this->assertEquals(5, $counter);
+    }
+
+    private function getColumnGenerator(?int $rowNumber = null, int $startOffset = 0): ColumnGeneratorInterface
+    {
+        return new ColumnGenerator($rowNumber, $startOffset);
     }
 }
