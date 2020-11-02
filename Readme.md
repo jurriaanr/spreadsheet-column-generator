@@ -32,7 +32,7 @@ A real world example would be this
 
 ## Walking the previously generated columns
 
-For setting the autosize f.e. on each cell you could of course add another line in the for loop for each cell. Easier though is to walk through all generated cells and execute a callback on each generated column:
+For setting the autosize f.e. on each cell you could of course add another line in the for loop for each cell. Less distracting though is to walk through all generated cells and execute a callback on each generated column:
 
     $columnGenerator->walk(function ($columnName) use ($productsSheet) {
         $productsSheet->getColumnDimension(substr($columnName, 0, -1))->setAutoSize(true);
